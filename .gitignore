@@ -1,0 +1,7 @@
+models
+.DS_Store
+.idea
+*.db
+*.txt
+*.sqlite3
+bin
