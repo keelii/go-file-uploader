@@ -1,8 +1,6 @@
 module go-file-uploader
 
-go 1.21
-
-toolchain go1.21.0
+go 1.18
 
 require (
 	github.com/flosch/go-humanize v0.0.0-20140728123800-3ba51eabe506
