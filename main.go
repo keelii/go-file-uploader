@@ -168,13 +168,10 @@ func main() {
 		DisableStartupMessage: true,
 	})
 	app.Use(logger.New(logger.Config{
-		Format: "${time} ${ip}:${port} ${status} - ${user} ${method} ${path}\n",
+		Format: "${time} ${ip}:${port} ${status} - ${method} ${path}\n",
 		CustomTags: map[string]logger.LogFunc{
 			"time": func(output logger.Buffer, c *fiber.Ctx, data *logger.Data, extraParam string) (int, error) {
 				return output.WriteString(time.Now().Format("2006/01/02 15:04:05.000000"))
-			},
-			"user": func(output logger.Buffer, c *fiber.Ctx, data *logger.Data, extraParam string) (int, error) {
-				return output.WriteString(c.Locals("username").(string))
 			},
 		},
 		Output:        requestLogOutput,
