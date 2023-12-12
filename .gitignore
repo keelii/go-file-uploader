@@ -1,3 +1,4 @@
+*.log
 models
 .DS_Store
 .idea
