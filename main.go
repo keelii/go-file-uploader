@@ -136,8 +136,14 @@ func main() {
 
 	requestLogOutput := os.Stdout
 	if *prd {
-		log.SetOutput(GetLogFileMust(*appLogFile))
+		appLog := GetLogFileMust(*appLogFile)
+		log.SetOutput(appLog)
 		requestLogOutput = GetLogFileMust(*reqLogFile)
+
+		defer func() {
+			_ = appLog.Close()
+			_ = requestLogOutput.Close()
+		}()
 	}
 
 	log.Info("--------------------------------------------------")
@@ -185,12 +191,13 @@ func main() {
 	}))
 
 	tpl, _ := pongo2.FromString(indexView)
+	accept := getAccepts()
 
 	app.Get("/", func(c *fiber.Ctx) error {
 		data := fiber.Map{
 			"url_prefix": urlPrefix,
 			"data":       readDirs(*uploadPath),
-			"accept":     getAccepts,
+			"accept":     accept,
 			"prd":        prd,
 		}
 		flashData := flash.Get(c)
@@ -234,7 +241,7 @@ func main() {
 	app.Post("/", func(c *fiber.Ctx) error {
 		data := fiber.Map{
 			"url_prefix": urlPrefix,
-			"accept":     getAccepts,
+			"accept":     accept,
 			"prd":        prd,
 		}
 
